@@ -1,0 +1,107 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "21c4a8be-1deb-4657-a546-9f484a61acf9",
+        "options": {}
+      },
+      "position": [-256, 0],
+      "webhookId": "21c4a8be-1deb-4657-a546-9f484a61acf9"
+    },
+    {
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3f952ed6-db57-4133-bbf4-455407090251",
+              "name": "body",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [32, 0]
+    },
+    {
+      "name": "Create a row",
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "parameters": {
+        "tableId": "=smartglove_data",
+        "fieldsUi": {
+          "fieldValues": [
+            { "fieldId": "event", "fieldValue": "={{ $json.body.event }}" },
+            { "fieldId": "rfid_uid", "fieldValue": "={{ $json.body.rfid_uid }}" },
+            { "fieldId": "user_name", "fieldValue": "={{ $json.body.user_name }}" },
+            { "fieldId": "mode", "fieldValue": "={{ $json.body.mode }}" },
+            { "fieldId": "input", "fieldValue": "={{ $json.body.input }}" }
+          ]
+        }
+      },
+      "position": [384, -96]
+    },
+    {
+      "name": "Send a text message",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "parameters": {
+        "chatId": "8603154125",
+        "text": "=user :  {{ $json.body.user_name }}\nmode : {{ $json.body.mode }}\ninput : {{ $json.body.input }}",
+        "additionalFields": { "appendAttribution": false }
+      },
+      "position": [656, 256],
+      "webhookId": "a0e24da2-ca5a-4a40-ba84-b44749e24d53"
+    },
+    {
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 3 },
+          "conditions": [
+            {
+              "id": "365edc71-6ea7-4c0d-a90f-5dbed27bbcbb",
+              "leftValue": "={{ $json.body.user_name }}",
+              "rightValue": "Sai",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "position": [288, 128]
+    },
+    {
+      "name": "Send a text message1",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "parameters": {
+        "chatId": "8190920424",
+        "text": "=user :  {{ $json.body.user_name }}\nmode : {{ $json.body.mode }}\nmessage : {{ $json.body.input }}",
+        "additionalFields": { "appendAttribution": false }
+      },
+      "position": [768, 96],
+      "webhookId": "d03afd4d-2844-467a-8641-e03b152946da"
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Edit Fields", "type": "main", "index": 0 }]] },
+    "Edit Fields": { "main": [[{ "node": "Create a row", "type": "main", "index": 0 }, { "node": "If", "type": "main", "index": 0 }]] },
+    "Create a row": { "main": [[]] },
+    "If": { "main": [[{ "node": "Send a text message1", "type": "main", "index": 0 }], [{ "node": "Send a text message", "type": "main", "index": 0 }]] },
+    "Send a text message": { "main": [[]] }
+  },
+  "settings": { "executionOrder": "v1", "binaryMode": "separate" }
+}
