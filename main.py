@@ -31,9 +31,9 @@ app.add_middleware(
 # SUPABASE CONFIG
 # =========================
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://vniwpphrnuhhyhauuepq.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "sb_secret_BpRz-kyzy3bVYee7KnfGKQ_4k-08Od1")
-SUPABASE_TABLE = os.getenv("SUPABASE_TABLE", "smartglove_data")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "YOUR_SUPABASE_PROJECT_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "YOUR_SUPABASE_KEY")
+SUPABASE_TABLE = os.getenv("SUPABASE_TABLE", "YOUR_SUPABASE_TABLE")
 
 supabase_url = f"{SUPABASE_URL}/rest/v1/{SUPABASE_TABLE}"
 
