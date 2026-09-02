@@ -65,7 +65,7 @@ SpeakLink Glove is an advanced assistive communication solution that bridges the
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Jairus25/speaklink_glove.git
    cd speaklink_glove
    ```
 
